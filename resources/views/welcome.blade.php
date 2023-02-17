@@ -137,4 +137,14 @@
             </div>
         </div>
     </body>
+
+    @vite('resources/js/app.js')
+    <script>
+        window.onload=function(){
+            Echo.channel('home')
+                .listen('NewMessage', (e)=>{
+                    console.log(e.message);
+                });
+        };
+    </script>
 </html>

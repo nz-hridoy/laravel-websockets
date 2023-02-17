@@ -32,7 +32,7 @@ class NewMessage implements ShouldBroadcast
     public function broadcastOn(): array
     {
         return [
-            new PrivateChannel('home'),
+            new Channel('home'),
         ];
     }
 }
