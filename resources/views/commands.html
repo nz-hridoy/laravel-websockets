@@ -1,0 +1,64 @@
+<!-- Install Laravel Websockets -->
+1. composer require beyondcode/laravel-websockets
+2. php artisan vendor:publish --provider="BeyondCode\LaravelWebSockets\WebSocketsServiceProvider" --tag="migrations"
+3. php artisan vendor:publish --provider="BeyondCode\LaravelWebSockets\WebSocketsServiceProvider" --tag="config"
+4. php artisan migrate
+
+<!-- Config .env for local server -->
+PUSHER_APP_ID=1122 <!-- any -->
+PUSHER_APP_KEY=as41x4d11a4s1x <!-- any -->
+PUSHER_APP_SECRET=44a55e41d4a55s41xcd <!-- any -->
+
+
+<!-- run websockets server -->
+php artisan websocket:serve
+Websockets Dashboard: http://127.0.0.1:8000/laravel-websockets
+
+<!-- install pusher php server -->
+composer require pusher/pusher-php-server
+
+<!-- configure broadcast.php -->
+* if needed
+
+<!-- Config .env for local server -->
+PUSHER_HOST=127.0.0.1
+PUSHER_PORT=6001
+PUSHER_SCHEME=http
+
+<!-- add new event -->
+php artisan make:event NewMessage
+
+<!-- config NewMessageEvent -->
+class NewMessage implements ShouldBroadcast
+{
+    ...
+
+    public $message;
+
+    ...
+
+    public function __construct($message)
+    {
+        $this->message = $message;
+    }
+
+    ...
+
+    public function broadcastOn(): array
+    {
+        return [
+            new PrivateChannel('home'),
+        ];
+    }
+}
+
+<!-- check event in tinker -->
+php artisan tinker
+Make Event: event(new App\Events\NewMessage("Hello World"))
+* check event in websocket dashboard.
+
+<!-- install npm -->
+use "yarn" or "npm install"
+
+<!-- install laravel echo & pusher js -->
+yarn add laravel-echo pusher-js
